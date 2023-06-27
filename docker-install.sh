@@ -28,10 +28,12 @@ log() {
 log "Updating packages (may take some time)"
 apt-get update &>/dev/null
 apt-get -y upgrade &>/dev/null
-log "Update Complete\n"
+log "Complete\n"
 
 # Remove any existing packages installed that may conflict
-for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do apt-get remove $pkg; done
+log "Removing any older conflicting packagages"
+for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do apt-get remove $pkg &>/dev/null; done
+log "Complete!\n"
 
 # Update the apt package index and install packages to allow apt to use a repository over HTTPS:
 apt-get install ca-certificates curl gnupg
@@ -51,6 +53,7 @@ echo \
 log "Docker repository added\n"
 
 # Install Docker Engine, containerd, and Docker Compose
-log "Installing docker components"
-apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-log " - Complete!"
+log "Installing Docker components"
+apt-get update &>/dev/null
+apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin &>/dev/null
+log "Complete!"
